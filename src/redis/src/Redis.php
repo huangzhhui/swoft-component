@@ -12,6 +12,7 @@ namespace Swoft\Redis;
 
 use Psr\SimpleCache\CacheInterface;
 use Swoft\App;
+use Swoft\Bean\Annotation\Bean;
 use Swoft\Cache\CacheCoResult;
 use Swoft\Cache\CacheDataResult;
 use Swoft\Core\ResultInterface;
@@ -20,7 +21,8 @@ use Swoft\Pool\PoolInterface;
 use Swoft\Redis\Pool\RedisPool;
 
 /**
- * Psr 16 implement by Redis 
+ * Psr 16 implement by Redis
+ * @Bean()
  * @method string getLastError()
  * @method bool clearLastError()
  */
@@ -29,7 +31,7 @@ class Redis implements CacheInterface
     /**
      * @var string
      */
-    private $poolName = RedisPool::class;
+    protected $poolName = RedisPool::class;
 
     /**
      * Get the value related to the specified key

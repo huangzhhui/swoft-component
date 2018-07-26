@@ -10,29 +10,17 @@ use Swoft\Bean\Annotation\PointBean;
 use Swoft\Log\Log;
 
 /**
- * the aspect of redis
- *
  * @Aspect()
  * @PointBean({
  *     RedisCache::class
  * })
- *
- * @uses      RedisAspect
- * @version   2018年01月03日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
 class RedisAspect
 {
-    /**
-     * the prefix of profile
-     */
+
     const PROFILE_PREFIX = 'redis';
 
     /**
-     * before of method
-     *
      * @Before()
      * @param JoinPoint $joinPoint
      */
@@ -43,8 +31,6 @@ class RedisAspect
     }
 
     /**
-     * afterReturning of method
-     *
      * @AfterReturning()
      * @param JoinPoint $joinPoint
      *
@@ -59,8 +45,6 @@ class RedisAspect
     }
 
     /**
-     * the key of profile
-     *
      * @param JoinPoint $joinPoint
      *
      * @return string
