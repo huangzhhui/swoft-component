@@ -50,11 +50,13 @@
         "swoft/view": "self.version",
         "swoft/process": "self.version",
         "swoft/service-governance": "self.version",
-        "swoft/websocket-server": "self.version"
+        "swoft/websocket-server": "self.version",
+        "swoft/auth": "self.version"
     },
     "autoload": {
         "psr-4": {
             "Swoft\\": "src/framework/src/",
+            "Swoft\\Auth\\": "src/auth/src/",
             "Swoft\\Cache\\": "src/cache/src/",
             "Swoft\\Console\\": "src/console/src/",
             "Swoft\\DataParser\\": "src/data-parser/src/",
