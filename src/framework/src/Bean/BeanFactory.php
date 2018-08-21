@@ -27,11 +27,10 @@ class BeanFactory implements BeanFactoryInterface
      */
     public static function init()
     {
-        $properties = self::getProperties();
-
         self::$container = new Container();
-        self::$container->setProperties($properties);
+        self::$container->setProperties(self::getProperties());
         self::$container->autoloadServerAnnotation();
+
 
         $definition = self::getServerDefinition();
         self::$container->addDefinitions($definition);

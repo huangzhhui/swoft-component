@@ -43,6 +43,11 @@ class ApplicationContext
     private static $context = self::CONSOLE;
 
     /**
+     * @var array
+     */
+    protected static $container = [];
+
+    /**
      * 运行过程中创建一个Bean
      *
      * Below are some examples:
@@ -96,6 +101,40 @@ class ApplicationContext
     public static function containsBean($name)
     {
         return BeanFactory::hasBean($name);
+    }
+
+    /**
+     * Set data to ApplicationContext container
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return mixed
+     */
+    public static function set(string $key, $value)
+    {
+        self::$container[$key] = $value;
+        return $value;
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public static function has(string $key): bool
+    {
+        return isset(self::$container[$key]);
+    }
+
+    /**
+     * Get data from ApplicationContext container
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public static function get(string $key, $default)
+    {
+        return self::$container[$key] ?? $default;
     }
 
     /**

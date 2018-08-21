@@ -33,7 +33,6 @@ class ServerCommand
         // 是否正在运行
         if ($httpServer->isRunning()) {
             $serverStatus = $httpServer->getServerSetting();
-
             \output()->writeln("<error>The server have been running!(PID: {$serverStatus['masterPid']})</error>", true, true);
         } else {
             $serverStatus = $httpServer->getServerSetting();
@@ -169,16 +168,10 @@ class ServerCommand
      */
     private function getHttpServer(): HttpServer
     {
-        // check env
         EnvHelper::check();
+        // HTTP Server Init
+        return (new HttpServer())->setScriptFile(\input()->getScript());
 
-        // http server初始化
-        $script = input()->getScript();
-
-        $httpServer = new HttpServer();
-        $httpServer->setScriptFile($script);
-
-        return $httpServer;
     }
 
     /**

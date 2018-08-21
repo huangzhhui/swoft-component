@@ -105,10 +105,12 @@ trait ServerTrait
 
     /**
      * @param string $scriptFile
+     * @return $this
      */
-    public function setScriptFile(string $scriptFile)
+    public function setScriptFile(string $scriptFile): self
     {
         $this->scriptFile = $scriptFile;
+        return $this;
     }
 
     /**
@@ -125,18 +127,16 @@ trait ServerTrait
     }
 
     /**
+     * @param int $workerId
      * @param bool $isWorker
-     * @throws \InvalidArgumentException
-     * @throws \ReflectionException
      */
-    protected function reloadBean(bool $isWorker)
+    protected function reloadBean(int $workerId, bool $isWorker)
     {
         BeanFactory::reload();
-        $initApplicationContext = new InitApplicationContext();
-        $initApplicationContext->init();
+        (new InitApplicationContext())->init();
 
-        if($isWorker && $this->workerLock->trylock() && env('AUTO_REGISTER', false)){
-            App::trigger(AppEvent::WORKER_START);
+        if($isWorker){
+            App::trigger(AppEvent::WORKER_START, null, $workerId, $isWorker);
         }
     }
 
