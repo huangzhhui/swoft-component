@@ -4,12 +4,6 @@ namespace Swoft\Bean\ObjectDefinition;
 
 /**
  * 数组属性的参数或构造函数的参数注入对象
- *
- * @uses      ArgsInjection
- * @version   2017年08月18日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 Swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
 class ArgsInjection
 {
@@ -25,14 +19,8 @@ class ArgsInjection
      *
      * @var bool
      */
-    private $ref = false;
+    private $ref;
 
-    /**
-     * ArgsInjection constructor.
-     *
-     * @param mixed $value
-     * @param bool  $ref
-     */
     public function __construct($value, $ref = false)
     {
         $this->value = $value;
@@ -51,8 +39,6 @@ class ArgsInjection
 
     /**
      * 参数是否是bean引用
-     *
-     * @return bool
      */
     public function isRef(): bool
     {

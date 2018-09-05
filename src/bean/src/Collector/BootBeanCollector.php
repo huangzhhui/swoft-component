@@ -5,34 +5,14 @@ namespace Swoft\Bean\Collector;
 use Swoft\Bean\Annotation\BootBean;
 use Swoft\Bean\CollectorInterface;
 
-/**
- * The collector of boot bean
- */
 class BootBeanCollector implements CollectorInterface
 {
-    /**
-     * The type of server
-     */
-    const TYPE_SERVER = 'server';
 
-    /**
-     * The type of worker
-     */
+    const TYPE_SERVER = 'server';
     const TYPE_WORKER = 'worker';
 
-    /**
-     * @var array
-     */
-    private static $beans = [];
+    private static $bootBeans = [];
 
-    /**
-     * @param string $className
-     * @param object $objectAnnotation
-     * @param string $propertyName
-     * @param string $methodName
-     * @param null $propertyValue
-     * @return mixed|void
-     */
     public static function collect(
         string $className,
         $objectAnnotation = null,
@@ -41,20 +21,16 @@ class BootBeanCollector implements CollectorInterface
         $propertyValue = null
     ) {
         if ($objectAnnotation instanceof BootBean) {
-            $server = $objectAnnotation->isServer();
-            if ($server) {
-                self::$beans[self::TYPE_SERVER][] = $className;
+            if ($objectAnnotation->isServer()) {
+                self::$bootBeans[self::TYPE_SERVER][] = $className;
             } else {
-                self::$beans[self::TYPE_WORKER][] = $className;
+                self::$bootBeans[self::TYPE_WORKER][] = $className;
             }
         }
     }
 
-    /**
-     * @return array
-     */
     public static function getCollector(): array
     {
-        return self::$beans;
+        return self::$bootBeans;
     }
 }

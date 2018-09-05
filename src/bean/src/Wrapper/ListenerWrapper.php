@@ -6,20 +6,9 @@ use Swoft\Bean\Annotation\Inject;
 use Swoft\Bean\Annotation\Listener;
 use Swoft\Bean\Annotation\Value;
 
-/**
- * 监听器封装器
- *
- * @uses      ListenerWrapper
- * @version   2017年09月05日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
- */
 class ListenerWrapper extends AbstractWrapper
 {
     /**
-     * 类注解
-     *
      * @var array
      */
     protected $classAnnotations = [
@@ -27,8 +16,6 @@ class ListenerWrapper extends AbstractWrapper
     ];
 
     /**
-     * 属性注解
-     *
      * @var array
      */
     protected $propertyAnnotations = [
@@ -38,9 +25,6 @@ class ListenerWrapper extends AbstractWrapper
 
     /**
      * 是否解析类注解
-     *
-     * @param array $annotations
-     * @return bool
      */
     public function isParseClassAnnotations(array $annotations): bool
     {
@@ -49,9 +33,6 @@ class ListenerWrapper extends AbstractWrapper
 
     /**
      * 是否解析属性注解
-     *
-     * @param array $annotations
-     * @return bool
      */
     public function isParsePropertyAnnotations(array $annotations): bool
     {
@@ -60,9 +41,6 @@ class ListenerWrapper extends AbstractWrapper
 
     /**
      * 是否解析方法注解
-     *
-     * @param array $annotations
-     * @return bool
      */
     public function isParseMethodAnnotations(array $annotations): bool
     {

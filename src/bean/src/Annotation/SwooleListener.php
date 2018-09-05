@@ -5,16 +5,10 @@ namespace Swoft\Bean\Annotation;
 use Swoft\Bootstrap\SwooleEvent;
 
 /**
- * the listener of swoole
+ * Use this annotation to listen swoole events.
  *
  * @Annotation
  * @Target("CLASS")
- *
- * @uses      SwooleListener
- * @version   2018年01月11日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
 class SwooleListener
 {
@@ -25,21 +19,10 @@ class SwooleListener
      */
     private $event = [];
 
-    /**
-     * @var string
-     */
     private $type = SwooleEvent::TYPE_SERVER;
 
-    /**
-     * @var int
-     */
     private $order = 0;
 
-    /**
-     * AutoController constructor.
-     *
-     * @param array $values
-     */
     public function __construct(array $values)
     {
         if (isset($values['value'])) {
@@ -59,25 +42,16 @@ class SwooleListener
         }
     }
 
-    /**
-     * @return array
-     */
     public function getEvent(): array
     {
         return $this->event;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return int
-     */
     public function getOrder(): int
     {
         return $this->order;

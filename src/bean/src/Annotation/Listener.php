@@ -3,7 +3,7 @@
 namespace Swoft\Bean\Annotation;
 
 /**
- * 监听器注解
+ * Use this annotation to listen an event
  *
  * @Annotation
  * @Target("CLASS")
@@ -11,17 +11,10 @@ namespace Swoft\Bean\Annotation;
 class Listener
 {
     /**
-     * 监听事件名称
-     *
-     * @var string
+     * The event name that you want to listen.
      */
     private $event = '';
 
-    /**
-     * AutoController constructor.
-     *
-     * @param array $values
-     */
     public function __construct(array $values)
     {
         if (isset($values['value'])) {
@@ -33,11 +26,6 @@ class Listener
         }
     }
 
-    /**
-     * 监听事件
-     *
-     * @return string
-     */
     public function getEvent(): string
     {
         return $this->event;

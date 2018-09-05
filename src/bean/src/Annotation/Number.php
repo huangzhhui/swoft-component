@@ -7,18 +7,10 @@ namespace Swoft\Bean\Annotation;
  *
  * @Annotation
  * @Target("METHOD")
- *
- * @uses      Number
- * @version   2017年11月13日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
 class Number
 {
-    /**
-     * @var string
-     */
+
     private $from = ValidatorFrom::POST;
 
     /**
@@ -43,7 +35,7 @@ class Number
     private $max = PHP_INT_MAX;
 
     /**
-     * @var string
+     * 错误文案
      */
     private $template = '';
 
@@ -54,11 +46,6 @@ class Number
      */
     private $default = null;
 
-    /**
-     * Integer constructor.
-     *
-     * @param array $values
-     */
     public function __construct(array $values)
     {
         if (isset($values['from'])) {
@@ -81,57 +68,36 @@ class Number
         }
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return int
-     */
     public function getMin(): int
     {
         return $this->min;
     }
 
-    /**
-     * @return int
-     */
     public function getMax(): int
     {
         return $this->max;
     }
 
-    /**
-     * @return int
-     */
     public function getDefault()
     {
         return $this->default;
     }
 
-    /**
-     * @return string
-     */
     public function getFrom(): string
     {
         return $this->from;
     }
 
-    /**
-     * @return string
-     */
     public function getTemplate(): string
     {
         return $this->template;
     }
 
-    /**
-     * @param string $template
-     */
     public function setTemplate(string $template)
     {
         $this->template = $template;

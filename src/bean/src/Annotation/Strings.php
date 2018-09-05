@@ -3,16 +3,12 @@
 namespace Swoft\Bean\Annotation;
 
 /**
- * String validator
- *
  * @Annotation
  * @Target("METHOD")
  */
 class Strings
 {
-    /**
-     * @var string
-     */
+
     private $from = ValidatorFrom::POST;
 
     /**
@@ -48,11 +44,6 @@ class Strings
      */
     private $default = null;
 
-    /**
-     * Strings constructor.
-     *
-     * @param array $values
-     */
     public function __construct(array $values)
     {
         if (isset($values['from'])) {
@@ -75,19 +66,11 @@ class Strings
         }
     }
 
-    /**
-     * @return string
-     */
     public function getFrom(): string
     {
         return $this->from;
     }
 
-    /**
-     * @param string $from
-     *
-     * @return Strings
-     */
     public function setFrom(string $from): Strings
     {
         $this->from = $from;
@@ -95,19 +78,11 @@ class Strings
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Strings
-     */
     public function setName(string $name): Strings
     {
         $this->name = $name;
@@ -115,19 +90,11 @@ class Strings
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getMin(): int
     {
         return $this->min;
     }
 
-    /**
-     * @param int $min
-     *
-     * @return Strings
-     */
     public function setMin(int $min): Strings
     {
         $this->min = $min;
@@ -135,19 +102,11 @@ class Strings
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getMax(): int
     {
         return $this->max;
     }
 
-    /**
-     * @param int $max
-     *
-     * @return Strings
-     */
     public function setMax(int $max): Strings
     {
         $this->max = $max;
@@ -155,19 +114,11 @@ class Strings
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
     public function getDefault()
     {
         return $this->default;
     }
 
-    /**
-     * @param null|string $default
-     *
-     * @return Strings
-     */
     public function setDefault($default): Strings
     {
         $this->default = $default;
@@ -175,17 +126,11 @@ class Strings
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTemplate(): string
     {
         return $this->template;
     }
 
-    /**
-     * @param string $template
-     */
     public function setTemplate(string $template)
     {
         $this->template = $template;

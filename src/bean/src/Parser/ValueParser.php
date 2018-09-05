@@ -2,95 +2,75 @@
 
 namespace Swoft\Bean\Parser;
 
-use Swoft\Bean\Annotation\Value;
 use Swoft\Helper\DocumentHelper;
 
-/**
- * value注解解析器
- *
- * @uses      ValueParser
- * @version   2017年11月14日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
- */
 class ValueParser extends AbstractParser
 {
-    /**
-     * Inject注解解析
-     *
-     * @param string $className
-     * @param Value $objectAnnotation
-     * @param string $propertyName
-     * @param string $methodName
-     * @param null $propertyValue
-     * @return array
-     */
-    public function parser(string $className, $objectAnnotation = null, string $propertyName = "", string $methodName = "", $propertyValue = null)
-    {
+
+    public function parser(
+        string $className,
+        $objectAnnotation = null,
+        string $propertyName = '',
+        string $methodName = '',
+        $propertyValue = null
+    ): array {
         $injectValue = $objectAnnotation->getName();
-        $envValue    = $objectAnnotation->getEnv();
+        $envValue = $objectAnnotation->getEnv();
         if (empty($injectValue) && empty($envValue)) {
-            throw new \InvalidArgumentException("the name and env of @Value can't be empty! class={$className} property={$propertyName}");
+            throw new \InvalidArgumentException("The value of @Value annotation cannot be empty! class={$className} property={$propertyName}");
         }
 
-        $isRef          = false;
+        $isRef = false;
         $injectProperty = null;
-        if (!empty($injectValue)) {
+        if (! empty($injectValue)) {
             list($injectProperty, $isRef) = $this->annotationResource->getTransferProperty($injectValue);
         }
 
-        if (!empty($envValue)) {
-            $value          = $this->getEnvValue($envValue);
-            $isArray        = $this->isEnvArrayValue($className, $propertyName);
-            $value          = $this->getTransferEnvValue($value, $isArray);
-            $injectProperty = ($value !== null) ? $value : $injectProperty;
-            $isRef          = ($value !== null) ? false : $isRef;
+        if (! empty($envValue)) {
+            $value = $this->getEnvValue($envValue);
+            $isArray = $this->isEnvArrayValue($className, $propertyName);
+            $value = $this->transferEnvValue($value, $isArray);
+            $injectProperty = $value ?? $injectProperty;
+            $isRef = ($value !== null) ? false : $isRef;
         }
 
         return [$injectProperty, $isRef];
     }
 
     /**
-     * transfer the value of env
+     * Transfer the value of env
      *
      * @param mixed $value
-     * @param bool  $isArray
-     *
+     * @param bool $isArray
      * @return mixed
      */
-    private function getTransferEnvValue($value, bool $isArray)
+    private function transferEnvValue($value, bool $isArray)
     {
         if ($value === null) {
             return null;
         }
 
-        if ($isArray == false) {
+        if ($isArray === false) {
             return $value;
         }
 
         if (empty($value)) {
             $value = [];
         } else {
-            $value = explode(",", $value);
+            $value = explode(',', $value);
         }
 
         return $value;
     }
 
     /**
-     * whether the value of env is array
-     *
-     * @param string $className
-     * @param string $propertyName
-     *
-     * @return bool
+     * Whether the value of env is array
      */
-    private function isEnvArrayValue(string $className, string $propertyName)
+    private function isEnvArrayValue(string $className, string $propertyName): bool
     {
-        $rc   = new \ReflectionClass($className);
-        $rp   = $rc->getProperty($propertyName);
-        $doc  = $rp->getDocComment();
+        $rc = new \ReflectionClass($className);
+        $rp = $rc->getProperty($propertyName);
+        $doc = $rp->getDocComment();
         $tags = DocumentHelper::tagList($doc);
         if (isset($tags['var']) && $tags['var'] == 'array') {
             return true;
@@ -100,9 +80,7 @@ class ValueParser extends AbstractParser
     }
 
     /**
-     * match env value
-     *
-     * @param string $envValue
+     * Match env value
      *
      * @return mixed|string
      */

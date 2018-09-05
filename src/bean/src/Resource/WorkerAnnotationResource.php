@@ -7,9 +7,15 @@
  * @contact group@swoft.org
  * @license https://github.com/swoft-cloud/swoft/blob/master/LICENSE
  */
+
 namespace Swoft\Bean\Resource;
 
 use Swoft\Helper\ComponentHelper;
+use function basename;
+use function dirname;
+use function in_array;
+use function is_dir;
+use function scandir;
 
 /**
  *  The annotation resource of worker
@@ -21,8 +27,8 @@ class WorkerAnnotationResource extends AnnotationResource
      */
     public function registerNamespace()
     {
-        $hostDir = \dirname(__FILE__, 5);
-        if (\in_array(\basename($hostDir), ['swoft', 'src'])) {
+        $hostDir = dirname(__FILE__, 5);
+        if (in_array(basename($hostDir), ['swoft', 'src'])) {
             //install by composer
             $componentDirs = scandir($hostDir, null);
         } else {
@@ -53,7 +59,7 @@ class WorkerAnnotationResource extends AnnotationResource
                 if ($dir == '.' || $dir == '..') {
                     continue;
                 }
-                if (\in_array($dir, $this->serverScan, true)) {
+                if (in_array($dir, $this->serverScan, true)) {
                     continue;
                 }
                 $scanDir = $componentCommandDir . DS . $dir;

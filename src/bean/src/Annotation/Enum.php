@@ -7,36 +7,24 @@ namespace Swoft\Bean\Annotation;
  *
  * @Annotation
  * @Target("METHOD")
- *
- * @uses      Enum
- * @version   2017年09月04日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
 class Enum
 {
-    /**
-     * @var string
-     */
+
     private $from = ValidatorFrom::POST;
 
     /**
      * 字段名称
-     *
-     * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * 枚举值集合
-     *
-     * @var array
      */
-    private $values;
+    private $values = [];
 
     /**
-     * @var string
+     * 错误文案
      */
     private $template = '';
 
@@ -47,11 +35,6 @@ class Enum
      */
     private $default = null;
 
-    /**
-     * EnumStr constructor.
-     *
-     * @param array $values
-     */
     public function __construct(array $values)
     {
         if (isset($values['from'])) {
@@ -71,17 +54,11 @@ class Enum
         }
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return array
-     */
     public function getValues(): array
     {
         return $this->values;
@@ -95,25 +72,16 @@ class Enum
         return $this->default;
     }
 
-    /**
-     * @return string
-     */
     public function getFrom(): string
     {
         return $this->from;
     }
 
-    /**
-     * @return string
-     */
     public function getTemplate(): string
     {
         return $this->template;
     }
 
-    /**
-     * @param string $template
-     */
     public function setTemplate(string $template)
     {
         $this->template = $template;

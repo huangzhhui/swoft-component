@@ -3,9 +3,9 @@
 namespace Swoft\Bean\Resource;
 
 use Swoft\Bean\ObjectDefinition;
-use Swoft\Bean\ObjectDefinition\PropertyInjection;
-use Swoft\Bean\ObjectDefinition\MethodInjection;
 use Swoft\Bean\ObjectDefinition\ArgsInjection;
+use Swoft\Bean\ObjectDefinition\MethodInjection;
+use Swoft\Bean\ObjectDefinition\PropertyInjection;
 
 /**
  * 定义配置解析资源
@@ -33,7 +33,7 @@ class DefinitionResource extends AbstractResource
     public function __construct($definitions)
     {
         $this->definitions = $definitions;
-        $this->properties = $definitions['config']['properties']??[];
+        $this->properties = $definitions['config']['properties'] ?? [];
     }
 
     /**
@@ -47,7 +47,7 @@ class DefinitionResource extends AbstractResource
      * ]
      * </pre>
      */
-    public function getDefinitions()
+    public function getDefinitions(): array
     {
         $definitions = [];
         foreach ($this->definitions as $beanName => $definition) {
@@ -60,14 +60,13 @@ class DefinitionResource extends AbstractResource
     /**
      * 解析bean配置
      *
-     * @param string $beanName   名称
-     * @param array  $definition 数组定义格式
-     *
+     * @param string $beanName 名称
+     * @param array $definition 数组定义格式
      * @return ObjectDefinition
      */
     public function resolvedefinitation(string $beanName, array $definition)
     {
-        if (!isset($definition['class'])) {
+        if (! isset($definition['class'])) {
             throw new \InvalidArgumentException('definitions of bean 初始化失败，class字段没有配置,Data=' . json_encode($definition));
         }
 
@@ -95,7 +94,6 @@ class DefinitionResource extends AbstractResource
      * 解析配置属性和构造函数
      *
      * @param array $definition
-     *
      * @return array
      * <pre>
      * [$propertyInjections, $constructorInjection]
@@ -135,7 +133,6 @@ class DefinitionResource extends AbstractResource
      * 解析数组值属性
      *
      * @param array $propertyValue
-     *
      * @return array
      */
     private function resolverArrayArgs(array $propertyValue)
@@ -160,7 +157,6 @@ class DefinitionResource extends AbstractResource
      * 解析构造函数
      *
      * @param array $args
-     *
      * @return MethodInjection
      */
     private function resolverConstructor(array $args)

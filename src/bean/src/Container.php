@@ -14,12 +14,16 @@ use Swoft\Bean\Resource\DefinitionResource;
 use Swoft\Bean\Resource\ServerAnnotationResource;
 use Swoft\Bean\Resource\WorkerAnnotationResource;
 use Swoft\Exception\ContainerException;
+use function array_diff;
+use function array_keys;
+use function array_merge;
+use function array_unique;
+use function basename;
+use function glob;
+use function is_array;
+use function is_dir;
+use function sprintf;
 
-/**
- * Class Container
- *
- * @package Swoft\Bean
- */
 class Container implements ContainerInterface
 {
     /**
@@ -30,44 +34,42 @@ class Container implements ContainerInterface
     private $singletonEntries = [];
 
     /**
-     * 已解析的bean规则
+     * The definitions has been parsed.
      *
      * @var ObjectDefinition[][]
      */
     private $definitions = [];
 
     /**
-     * properties.php配置信息
+     * The config properties from config/properties.
      *
      * @var array
      */
     private $properties = [];
 
     /**
-     * 默认创建bean执行的初始化方法
+     * The default initialize method when bean created.
      *
      * @var string
      */
     private $initMethod = 'init';
 
     /**
-     * 获取一个bean
+     * Finds an entry of the container by its identifier and returns it.
      *
-     * @param string $name 名称
-     *
-     * @return mixed
+     * @param string $id Identifier of the entry to look for.
      * @throws \InvalidArgumentException
      * @throws \ReflectionException
      * @throws ContainerException
      */
     public function get($name)
     {
-        // 已经创建
+        // Has been created.
         if (isset($this->singletonEntries[$name])) {
             return $this->singletonEntries[$name];
         }
 
-        // 未定义
+        // Not exist.
         if (! isset($this->definitions[$name])) {
             throw new ContainerException(sprintf('Bean [%s] not exist', $name));
         }
@@ -85,7 +87,6 @@ class Container implements ContainerInterface
      * It does however mean that `get($id)` will not throw a `NotFoundExceptionInterface`.
      *
      * @param string $id Identifier of the entry to look for.
-     * @return bool
      */
     public function has($id): bool
     {
@@ -93,11 +94,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * 是否存在某个bean
-     *
-     * @param string $beanName 名称
-     *
-     * @return bool
+     * Is the bean exist ?
      */
     public function hasBean(string $beanName): bool
     {
@@ -105,18 +102,16 @@ class Container implements ContainerInterface
     }
 
     /**
-     * 定义配置bean
-     *
-     * @param array $definitions
+     * Add bean definitions.
      */
     public function addDefinitions(array $definitions)
     {
-        $resource          = new DefinitionResource($definitions);
+        $resource = new DefinitionResource($definitions);
         $this->definitions = array_merge($resource->getDefinitions(), $this->definitions);
     }
 
     /**
-     * Register the annotation of server
+     * Register the annotation of server.
      */
     public function autoloadServerAnnotation()
     {
@@ -129,7 +124,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Register the annotation of worker
+     * Register the annotation of worker.
      */
     public function autoloadWorkerAnnotation()
     {
@@ -138,11 +133,11 @@ class Container implements ContainerInterface
         $resource->addScanNamespace($beanScan);
         $definitions = $resource->getDefinitions();
 
-        $this->definitions = \array_merge($definitions, $this->definitions);
+        $this->definitions = array_merge($definitions, $this->definitions);
     }
 
     /**
-     * 初始化已定义的bean
+     * Init the bean has been defined.
      *
      * @throws \Swoft\Exception\ContainerException
      * @throws \InvalidArgumentException
@@ -155,7 +150,6 @@ class Container implements ContainerInterface
             return;
         }
 
-        // 循环初始化
         foreach ($this->definitions as $beanName => $definition) {
             $this->get($beanName);
         }
@@ -184,7 +178,7 @@ class Container implements ContainerInterface
      */
     public function getBeanNames(): array
     {
-        return \array_keys($this->definitions);
+        return array_keys($this->definitions);
     }
 
     /**
@@ -196,14 +190,15 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @param string           $name
-     * @param ObjectDefinition $objectDefinition Bean definition
-     * @return object The proxy class of bean
+     * Create an bean and set to bean container.
+     * Return the bean instance by name, notice that when swoft-aop
+     * component exise, the bean instance will become a proxy object.
+     *
      * @throws \RuntimeException
      * @throws \ReflectionException
      * @throws \InvalidArgumentException
      */
-    private function set(string $name, ObjectDefinition $objectDefinition)
+    private function set(string $name, ObjectDefinition $objectDefinition): object
     {
         if ($refBeanName = $objectDefinition->getRef()) {
             return $this->get($refBeanName);
@@ -250,8 +245,6 @@ class Container implements ContainerInterface
     /**
      * Get Constructor injection
      *
-     * @param MethodInjection $constructorInjection
-     * @return array
      * @throws \InvalidArgumentException
      * @throws \ReflectionException
      */
@@ -260,9 +253,9 @@ class Container implements ContainerInterface
         $constructorParameters = [];
 
         /* @var ArgsInjection $parameter */
-        foreach ($constructorInjection->getParameters() as $parameter) {
+        foreach ($constructorInjection->getParameters() ?? [] as $parameter) {
             $argValue = $parameter->getValue();
-            if (\is_array($argValue)) {
+            if (is_array($argValue)) {
                 $constructorParameters[] = $this->injectArrayArgs($argValue);
                 continue;
             }
@@ -276,12 +269,7 @@ class Container implements ContainerInterface
         return $constructorParameters;
     }
 
-    /**
-     * @param \ReflectionClass $reflectionClass
-     * @param array            $constructorParameters
-     * @return object
-     */
-    private function newBeanInstance(\ReflectionClass $reflectionClass, array $constructorParameters)
+    private function newBeanInstance(\ReflectionClass $reflectionClass, array $constructorParameters): object
     {
         if ($reflectionClass->hasMethod('__construct')) {
             return $reflectionClass->newInstanceArgs($constructorParameters);
@@ -291,9 +279,9 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @param  mixed                $object
+     * @param  mixed $object
      * @param \ReflectionProperty[] $properties $properties
-     * @param  mixed                $propertyInjects
+     * @param  mixed $propertyInjects
      * @throws \InvalidArgumentException
      * @throws \ReflectionException
      */
@@ -320,7 +308,7 @@ class Container implements ContainerInterface
             /* @var PropertyInjection $propertyInjection */
             $propertyInjection = $propertyInjects[$propertyName];
             $injectProperty = $propertyInjection->getValue();
-            if (\is_array($injectProperty)) {
+            if (is_array($injectProperty)) {
                 $injectProperty = $this->injectArrayArgs($injectProperty);
             }
 
@@ -336,9 +324,6 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @param array $injectProperty
-     *
-     * @return array
      * @throws \InvalidArgumentException
      * @throws \ReflectionException
      */
@@ -346,13 +331,12 @@ class Container implements ContainerInterface
     {
         $injectAry = [];
         foreach ($injectProperty as $key => $property) {
-            // 递归循环注入
-            if (\is_array($property)) {
+            if (is_array($property)) {
                 $injectAry[$key] = $this->injectArrayArgs($property);
                 continue;
             }
 
-            // 参数注入
+            // Inject arguments
             if ($property instanceof ArgsInjection) {
                 $propertyValue = $property->getValue();
                 if ($property->isRef()) {
@@ -370,15 +354,11 @@ class Container implements ContainerInterface
         return $injectAry;
     }
 
-    /**
-     * @param string $name
-     * @return array
-     */
     private function getScanNamespaceFromProperties(string $name): array
     {
         $properties = $this->properties;
 
-        if (! isset($properties[$name]) || ! \is_array($properties[$name])) {
+        if (! isset($properties[$name]) || ! is_array($properties[$name])) {
             return [];
         }
 
@@ -388,9 +368,6 @@ class Container implements ContainerInterface
     /**
      * Get the proxy class
      *
-     * @param string $name
-     * @param string $className
-     * @return string
      * @throws \Swoft\Exception\ContainerException
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
@@ -414,26 +391,23 @@ class Container implements ContainerInterface
         return Proxy::newProxyClass($className);
     }
 
-    /**
-     * @return array
-     */
     private function getBeanScanNamespace(): array
     {
-        $beanScan    = $this->getScanNamespaceFromProperties('beanScan');
+        $beanScan = $this->getScanNamespaceFromProperties('beanScan');
         $excludeScan = $this->getScanNamespaceFromProperties('excludeScan');
-        if (!empty($beanScan)) {
+        if (! empty($beanScan)) {
             return array_diff($beanScan, $excludeScan);
         }
 
         $appDir = alias('@app');
-        $dirs   = glob($appDir . '/*');
+        $dirs = glob($appDir . '/*');
 
         $beanNamespace = [];
         foreach ($dirs as $dir) {
-            if (!is_dir($dir)) {
+            if (! is_dir($dir)) {
                 continue;
             }
-            $nsName          = basename($dir);
+            $nsName = basename($dir);
             $beanNamespace[] = sprintf('App\%s', $nsName);
         }
 

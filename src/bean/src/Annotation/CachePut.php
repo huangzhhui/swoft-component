@@ -3,19 +3,12 @@
 namespace Swoft\Bean\Annotation;
 
 /**
- * the annotation of cache put
- *
  * @Annotation
  * @Target("METHOD")
- *
- * @uses      CachePut
- * @version   2017年12月27日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
 class CachePut
 {
+
     /**
      * @var string
      */
@@ -36,11 +29,6 @@ class CachePut
      */
     private $condition;
 
-    /**
-     * CachePut constructor.
-     *
-     * @param array $values
-     */
     public function __construct(array $values)
     {
         if (isset($values['value'])) {
@@ -60,33 +48,21 @@ class CachePut
         }
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getKey(): string
     {
         return $this->key;
     }
 
-    /**
-     * @return int
-     */
     public function getTtl(): int
     {
         return $this->ttl;
     }
 
-    /**
-     * @return string
-     */
     public function getCondition(): string
     {
         return $this->condition;

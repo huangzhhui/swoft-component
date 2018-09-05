@@ -3,23 +3,14 @@
 namespace Swoft\Bean\Annotation;
 
 /**
- * The annotation of definition
- *
  * @Annotation
  * @Target("CLASS")
  */
 class Definition
 {
-    /**
-     * @var string
-     */
-    private $name = "";
 
-    /**
-     * Definition constructor.
-     *
-     * @param array $values
-     */
+    private $name = '';
+
     public function __construct(array $values)
     {
         if (isset($values['value'])) {
@@ -31,9 +22,6 @@ class Definition
         }
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: inhere
- * Date: 2018/3/19
- * Time: 上午11:43
- */
 
 namespace Swoft\Bean\Annotation;
 
@@ -17,7 +11,6 @@ namespace Swoft\Bean\Annotation;
  * - ServerListener 不影响 `/framework/src/Bootstrap/Server` 里基础swoole事件的绑定
  *
  * @package Swoft\Bean\Annotation
- *
  * @Annotation
  * @Target("CLASS")
  */
@@ -51,6 +44,6 @@ class ServerListener
      */
     public function getEvent(): array
     {
-        return $this->event ?: [];
+        return $this->event ? : [];
     }
 }

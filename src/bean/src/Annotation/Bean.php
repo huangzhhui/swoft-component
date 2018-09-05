@@ -3,29 +3,17 @@
 namespace Swoft\Bean\Annotation;
 
 /**
- * bean注解
- *
  * @Annotation
  * @Target("CLASS")
- *
- * @uses      Bean
- * @version   2017年08月18日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 Swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
 class Bean
 {
     /**
-     * bean名称
-     *
      * @var string
      */
-    private $name = "";
+    private $name = '';
 
     /**
-     * bean类型
-     *
      * @var int
      */
     private $scope = Scope::SINGLETON;
@@ -35,13 +23,8 @@ class Bean
      *
      * @var string
      */
-    private $ref = "";
+    private $ref = '';
 
-    /**
-     * Bean constructor.
-     *
-     * @param array $values
-     */
     public function __construct(array $values)
     {
         if (isset($values['value'])) {
@@ -59,7 +42,7 @@ class Bean
     }
 
     /**
-     * 获取bean名称
+     * Get the bean name
      *
      * @return string
      */
@@ -69,17 +52,17 @@ class Bean
     }
 
     /**
-     * 获取bean类型
+     * Get the bean scope
      *
      * @return int
      */
-    public function getScope()
+    public function getScope(): int
     {
         return $this->scope;
     }
 
     /**
-     * return name of referenced bean
+     * Get the name of referenced bean
      *
      * @return string
      */

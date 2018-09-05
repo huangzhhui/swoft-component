@@ -8,11 +8,6 @@ namespace Swoft\Bean;
 interface CollectorInterface
 {
     /**
-     * @param string $className
-     * @param object|null $objectAnnotation
-     * @param string $propertyName
-     * @param string $methodName
-     * @param null $propertyValue
      * @return mixed
      */
     public static function collect(

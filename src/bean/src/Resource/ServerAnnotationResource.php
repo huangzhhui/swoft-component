@@ -3,6 +3,11 @@
 namespace Swoft\Bean\Resource;
 
 use Swoft\Helper\ComponentHelper;
+use function basename;
+use function dirname;
+use function in_array;
+use function is_dir;
+use function scandir;
 
 /**
  * The annotation resource of server
@@ -14,8 +19,8 @@ class ServerAnnotationResource extends AnnotationResource
      */
     public function registerNamespace()
     {
-        $hostDir = \dirname(__FILE__, 5);
-        if (\in_array(\basename($hostDir), ['swoft', 'src'])) {
+        $hostDir = dirname(__FILE__, 5);
+        if (in_array(basename($hostDir), ['swoft', 'src'])) {
             //install by composer
             $componentDirs = scandir($hostDir, null);
         } else {
@@ -44,11 +49,11 @@ class ServerAnnotationResource extends AnnotationResource
 
             foreach ($this->serverScan as $dir) {
                 $scanDir = $componentCommandDir . DS . $dir;
-                if (!is_dir($scanDir)) {
+                if (! is_dir($scanDir)) {
                     continue;
                 }
 
-                $scanNs                        = $ns . "\\" . $dir;
+                $scanNs = $ns . "\\" . $dir;
                 $this->scanNamespaces[$scanNs] = $scanDir;
             }
         }

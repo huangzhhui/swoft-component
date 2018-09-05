@@ -6,13 +6,7 @@ use Swoft\Bean\Annotation\Scope;
 use Swoft\Bean\ObjectDefinition\MethodInjection;
 
 /**
- * bean对象定义类
- *
- * @uses      ObjectDefinition
- * @version   2017年08月18日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 Swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
+ * Definition of bean object
  */
 class ObjectDefinition
 {
@@ -51,6 +45,7 @@ class ObjectDefinition
 
     /**
      * Property injections.
+     *
      * @var array
      */
     private $propertyInjections = [];
@@ -62,51 +57,27 @@ class ObjectDefinition
      */
     private $methodInjections = [];
 
-    /**
-     * 设置bean名称
-     *
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * 初始化bean名称
-     *
-     * @param string $name
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
+        return $this;
     }
 
-    /**
-     * 获取bean类名
-     *
-     * @return string
-     */
     public function getClassName(): string
     {
         return $this->className;
     }
 
-    /**
-     * 初始化bean类名
-     *
-     * @param string $className
-     */
     public function setClassName(string $className)
     {
         $this->className = $className;
     }
 
-    /**
-     * 设置bean类型
-     *
-     * @return int
-     */
     public function getScope(): int
     {
         return $this->scope;
@@ -114,8 +85,6 @@ class ObjectDefinition
 
 
     /**
-     * get referenced bean
-     *
      * @return string|null
      */
     public function getRef()
@@ -123,24 +92,16 @@ class ObjectDefinition
         return $this->ref;
     }
 
-    /**
-     * set referenced bean
-     *
-     * @param string $ref
-     */
-    public function setRef(string $ref)
+    public function setRef(string $ref): self
     {
         $this->ref = $ref;
+        return $this;
     }
 
-    /**
-     * 获取bean类型
-     *
-     * @param int $scope
-     */
-    public function setScope(int $scope)
+    public function setScope(int $scope): self
     {
         $this->scope = $scope;
+        return $this;
     }
 
     /**
@@ -155,8 +116,6 @@ class ObjectDefinition
 
     /**
      * 设置构造函数注入对象
-     *
-     * @param MethodInjection $constructorInjection
      */
     public function setConstructorInjection(MethodInjection $constructorInjection)
     {
