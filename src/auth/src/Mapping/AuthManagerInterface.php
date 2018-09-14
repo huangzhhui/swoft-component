@@ -14,16 +14,8 @@ use Swoft\Auth\Bean\AuthSession;
 
 interface AuthManagerInterface
 {
-    /**
-     * @param $accountTypeName
-     * @param array $data
-     * @return AuthSession
-     */
-    public function login(string $accountTypeName, array $data):AuthSession;
 
-    /**
-     * @param $token
-     * @return bool
-     */
-    public function authenticateToken(string $token):bool ;
+    public function login(string $accountTypeName, array $data): AuthSession;
+
+    public function authenticateToken(string $token): bool;
 }
